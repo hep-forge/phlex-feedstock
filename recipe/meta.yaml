@@ -1,10 +1,11 @@
 {% set versions = {
-    "0.0.0": "REPLACE_WITH_SHA256"
+    "0.4.3": "2dd95ed463971221c3f8d58893729ebdcd79d1da12d891038237b0eab872a864"
 } %}
 
 {% set version = environ.get('COMMIT_VERSION', None) %}
 {% set version = version or versions.keys()|first %}
 {% set version = version|string %}
+{% set root_tag = (root or '')|replace('.', '') %}
 
 {% set name = environ.get('ANACONDA_PACKAGE', 'phlex')|string|lower %}
 
@@ -13,15 +14,19 @@ package:
   version: {{ environ.get('ANACONDA_VERSION', version)|replace("-", ".") }}
 
 source:
-  url: "https://github.com/Framework-R-D/phlex/archive/refs/tags/{{ version }}.tar.gz"   # TODO: confirm upstream's actual tag/tarball naming
+  url: "https://github.com/Framework-R-D/phlex/archive/refs/tags/v{{ version }}.tar.gz"
   {% if versions.get(version, None) %}
   sha256: {{ versions.get(version) }}
   {% endif %}
 
 build:
   number: 0
+  string: "root{{ root_tag }}"
+  skip: true  # [not linux]
+  ignore_prefix_files:
+    - lib/*.pcm
   run_exports:
-    - {{ pin_subpackage(name, max_pin="x.x.x") }}
+    - {{ pin_subpackage(name, max_pin="x.x") }}
 
 requirements:
   build:
@@ -30,19 +35,56 @@ requirements:
     - {{ stdlib('c') }}
     - cmake
     - make
+    - pkg-config
   host:
-    # TODO: library dependencies
+    - cetmodules
+    - libboost-devel
+    - fmt
+    - tbb-devel
+    - ms-gsl
+    # Unpinned, the solver takes the newest fmt and falls back to spdlog 1.10,
+    # whose bundled fmt collides with the external one.
+    - spdlog >=1.15
+    - libjsonnet
+    - libffi
+    - python
+    - numpy
+    - root {{ root }}.*
+    - root-guard
   run:
-    # TODO: runtime dependencies
+    - python
+    - root {{ root }}.*
+    - root-guard
+    # phlexConfig.cmake re-exports these
+    - libboost-devel
+    - fmt
+    - tbb-devel
+    - ms-gsl
+    - spdlog >=1.15
 
 test:
+  source_files: []
+  files:
+    - test/
+  requires:
+    - {{ compiler('cxx') }}
+    - cmake
+    - make
   commands:
-    - echo "TODO: a real smoke test"
+    - test -f "${PREFIX}/lib/libphlex_core.so"
+    - test -f "${PREFIX}/etc/conda/activate.d/phlex_activate.sh"
+    - cmake -S test -B build -DCMAKE_PREFIX_PATH="${PREFIX}"
+    - cmake --build build
 
 about:
-  home: "https://github.com/Framework-R-D/phlex"
-  license: "Apache-2.0"
-  summary: "Parallel, hierarchical, layered data-processing framework"
+  home: https://github.com/Framework-R-D/phlex
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: Parallel, Hierarchical, and Layered Execution of data-processing algorithms
+  description: |
+    Phlex runs data-processing algorithms as multi-threaded workflows
+    organised around hierarchical data tiers, built on Intel TBB and on
+    the patterns of Fermilab's art framework.
 
 extra:
   recipe-maintainers:
