@@ -9,7 +9,7 @@ Feedstock for [phlex](https://github.com/Framework-R-D/phlex) — part of [hep-f
 Builds linux-amd64 + linux-arm64 in one matrix workflow and uploads to the
 [hep-forge](https://anaconda.org/hep-forge) Anaconda channel.
 
-Parallel, hierarchical, layered data-processing framework
+Parallel, Hierarchical, and Layered Execution of data-processing algorithms
 
 ## Architectures
 
