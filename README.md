@@ -13,7 +13,12 @@ Parallel, Hierarchical, and Layered Execution of data-processing algorithms
 
 ## Architectures
 
-State per architecture: see the platforms badge above or [anaconda.org/hep-forge/phlex](https://anaconda.org/hep-forge/phlex).
+| Architecture | Latest published |
+|--------------|------------------|
+| linux-amd64 (`linux-64`) | ✅ `0.4.3` |
+| linux-arm64 (`linux-aarch64`) | ✅ `0.4.3` |
+
+_As of the last feedstock render; the badges above are live._
 
 
 ## Install
