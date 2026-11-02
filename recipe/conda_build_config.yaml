@@ -21,13 +21,13 @@ packages:
 # unsolvable against `root`, which pins libstdcxx 15.* and so caps every
 # dependent below 16. A floor, not a ceiling: raise per-package if needed.
 c_compiler_version:         # [linux]
-  - 15
+  - 15                       # [linux]
 cxx_compiler_version:       # [linux]
-  - 15
+  - 15                       # [linux]
 libgcc_version:             # [linux]
-  - 15.*
+  - 15.*                     # [linux]
 libstdcxx_version:          # [linux]
-  - 15.*
+  - 15.*                     # [linux]
 
 # phlex uses C++23 library features that libstdc++ only has from GCC 15
 # (std::vector(std::from_range, ...)), so it can't use the GCC 14 floor.
