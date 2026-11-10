@@ -21,13 +21,13 @@ packages:
 # unsolvable against `root`, which pins libstdcxx 15.* and so caps every
 # dependent below 16. A floor, not a ceiling: raise per-package if needed.
 c_compiler_version:         # [linux]
-  - 15                       # [linux]
+  - 16                       # [linux]
 cxx_compiler_version:       # [linux]
-  - 15                       # [linux]
+  - 16                       # [linux]
 libgcc_version:             # [linux]
-  - 15.*                     # [linux]
+  - 16.*                     # [linux]
 libstdcxx_version:          # [linux]
-  - 15.*                     # [linux]
+  - 16.*                     # [linux]
 
 # phlex uses C++23 library features that libstdc++ only has from GCC 15
 # (std::vector(std::from_range, ...)), so it can't use the GCC 14 floor.
@@ -39,3 +39,7 @@ python:
 # phlex's Python plugin needs NumPy 2.
 numpy:
   - 2
+
+# conda-forge root_base variant (cxx20/cxx23 in its build string)
+root_cxx_standard:
+  - 23
